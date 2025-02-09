@@ -1,0 +1,12 @@
+# Ignore dotfiles
+.*
+
+# Unignore .devcontainer/ and .gitignore itself
+!.devcontainer/
+!.gitignore
+
+# Ignore everything inside the odoo directory
+/odoo/*
+/odoo/**
+
+!/odoo/odoo.conf

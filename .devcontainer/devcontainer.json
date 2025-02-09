@@ -1,0 +1,109 @@
+{
+	"name": "Local Odoo Modules",
+	"runArgs": ["--name", "local_odoo_modules", "--add-host"," host.docker.internal:host-gateway"],
+    "build": { "dockerfile": "Dockerfile" },
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind,consistency=delegated",
+    "workspaceFolder": "/workspaces",
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {}
+	},
+    "forwardPorts": [4200,8069,5432],
+    "postStartCommand": "sudo service postgresql start",
+	"postCreateCommand": "pip install --no-cache-dir -r /workspaces/odoo/community/requirements.txt",
+	"customizations":{
+		"vscode":{
+			"settings": {
+				"editor.formatOnPaste": false,
+				"editor.formatOnSave": true,
+				/*
+				* Don't use the value "modificationsIfAvailable" for now, because there is a bug in the extension prettier that
+				* causes the prettier to add unnecessary semicolons, see https://github.com/prettier/prettier/issues/12964
+				*/
+				"editor.formatOnSaveMode": "file",
+				"editor.codeActionsOnSave": {
+					"source.fixAll": false,
+					"source.organizeImports": false
+				},
+				"files.autoSave": "onFocusChange",
+				"pylint.args": [
+					"--init-hook",
+					"import sys; sys.path.insert(0, '/odoo'); sys.path.insert(0, '/home/vscode/.local/lib/python3.10/site-packages')",
+					"--disable=C0114",
+					"--disable=C0115",
+					"--disable=C0301", /* line too long */
+					"--disable=E1101",
+					"--disable=W0104",
+					"--disable=W0212",
+					"--disable=C0116"
+				],
+				"python.analysis.extraPaths": [
+					"/odoo",
+					"/home/vscode/.local/lib/python3.10/site-packages"
+				],
+				"python.autoComplete.extraPaths": [
+					"/odoo",
+					"/home/vscode/.local/lib/python3.10/site-packages"
+				],
+				"autopep8.args": [
+					"--max-line-length=150"
+				],
+				"black-formatter.args": [
+					"--line-length=150"
+				],
+				"scm.defaultViewMode": "tree",
+				"xml.format.maxLineWidth": 0,
+				"xml.format.preserveSpace": [
+					"xsl:text",
+					"xsl:comment",
+					"xsl:processing-instruction",
+					"literallayout",
+					"programlisting",
+					"screen",
+					"synopsis",
+					"pre",
+					"xd:pre",
+					"field"
+				],
+				"indentRainbow.colors": [
+	
+					"rgba(255,255,64,0.04)",
+					"rgba(127,255,127,0.04)",
+					"rgba(255,127,255,0.04)",
+					"rgba(79,236,236,0.04)"
+				]
+			},
+			"extensions": [
+				"ms-vscode-remote.remote-containers",
+				//python
+				"ms-python.python",
+				"ms-python.autopep8",
+				"ms-python.black-formatter",
+				"ms-python.pylint",
+				"njpwerner.autodocstring",
+				"KevinRose.vsc-python-indent",
+				"ms-python.vscode-pylance",
+				"ms-python.isort",
+				//Path Intellisense
+				"christian-kohler.path-intellisense",
+				//Git
+				"donjayamanne.githistory",
+				"eamodio.gitlens",
+				"mhutchie.git-graph",
+				"letmaik.git-tree-compare",
+				"esbenp.prettier-vscode",
+				//Liveshare
+				"ms-vsliveshare.vsliveshare",
+				// code helpers
+				"VisualStudioExptTeam.vscodeintellicode",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				// visual aids
+				"oderwat.indent-rainbow",
+				// XML
+				"redhat.vscode-xml"
+			]
+		}
+	}
+
+  }
+  
